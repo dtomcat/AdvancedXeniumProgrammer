@@ -46,6 +46,8 @@ https://www.pishop.us/product/raspberry-pi-zero-w/
 -------------
 ## PROGRAMMING THE XENIUM CPLD AND/OR FLASH MEMORY (STANDALONE)
 
+Note: You will need to provide your own PrometheOS bin file. (save it in the /xenium-bin folder as PromOS.bin)
+
 - After the PI has fully booted and the green led is on...
     - Press the FIRST button to program the OpenXenium with XeniumOS.
     - Hold the FIRST button to program the OpenXenium with PrometheOS.
@@ -59,6 +61,8 @@ https://www.pishop.us/product/raspberry-pi-zero-w/
 -------------
 ## PROGRAMMING THE XENIUM CPLD AND/OR FLASH MEMORY (SSH/SERIAL)
 This is good to do if you keep getting an error trying to program the chips. (Red LED remains on)
+
+Note: You will need to provide your own PrometheOS bin file. (save it in the /xenium-bin folder as PromOS.bin)
 
 - Connect to the PI via SSH or Serial terminal
 - Change dir to AdvancedXeniumProgrammer
