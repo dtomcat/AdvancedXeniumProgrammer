@@ -1,0 +1,75 @@
+#!/bin/bash
+set -e
+echo -e '\n▒██   ██▒▓█████  ███▄    █  ██▓ █    ██  ███▄ ▄███▓'
+echo -e '▒▒ █ █ ▒░▓█   ▀  ██ ▀█   █ ▓██▒ ██  ▓██▒▓██▒▀█▀ ██▒'
+echo -e '░░  █   ░▒███   ▓██  ▀█ ██▒▒██▒▓██  ▒██░▓██    ▓██░'
+echo -e ' ░ █ █ ▒ ▒▓█  ▄ ▓██▒  ▐▌██▒░██░▓▓█  ░██░▒██    ▒██ '
+echo -e '▒██▒ ▒██▒░▒████▒▒██░   ▓██░░██░▒▒█████▓ ▒██▒   ░██▒'
+echo -e '▒▒ ░ ░▓ ░░░ ▒░ ░░ ▒░   ▒ ▒ ░▓  ░▒▓▒ ▒ ▒ ░ ▒░   ░  ░'
+echo -e '░░   ░▒ ░ ░ ░  ░░ ░░   ░ ▒░ ▒ ░░░▒Programmer░     ░'
+echo -e ' ░    ░     ░      ░   ░ ░  ▒kooscode@github   ░   '
+echo -e ' ░    ░     ░  ░         ░  ░     ░            ░   \n'
+
+while [ "$#" -gt 0 ]; do
+    case $1 in
+	#wifi|--wifi|-w) wifi=1 ;;
+	expert|--expert|-e) expert=1 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+# Set platform
+DEV_FILE=/sys/firmware/devicetree/base/model
+if [ -e $DEV_FILE ]; then
+    if grep -q "Onion Omega2+" "$DEV_FILE"; then
+        export PLATFORM=OMEGA2
+        echo '       !! ONION OMEGA2+ DETECTED !!\n'
+    elif grep -q "Raspberry Pi" "$DEV_FILE"; then
+        export PLATFORM=PI
+        echo '--------------------------------------------'
+        echo -e '\n INSTALLING PI UPDATES AND REQUIREMENTS\n'
+        echo '--------------------------------------------'
+        sudo apt -y update
+        sudo apt -y install build-essential git cmake
+        # Installing latest wiringpi compatible with RPI-OS
+        wget https://project-downloads.drogon.net/wiringpi-latest.deb -O /tmp/wiringpi-latest.deb 
+        sudo dpkg -i /tmp/wiringpi-latest.deb
+    fi
+elif [ $expert ]; then
+        echo -e 'Expert mode enabled.'
+else
+        echo -e "You do not appear to be using a supported"
+        echo -e "platform. If you know what you''re doing and"
+        echo -e "want to proceed anyway, run this install"
+        echo -e "script again with the 'expert' flag, and"
+        echo -e "we'll attempt to build xenium-flash  "
+        echo -e "on your platform.\n"
+        echo -e "Bye."
+        exit 0
+fi
+
+# make and install xenium-flash to bin
+echo -e '------------------------------------------'
+echo -e '\n BUILDING XENIUM JTAG AND FLASH TOOLS\n'
+echo -e '------------------------------------------'
+if (which g++ || grep -q "g++" ); then
+    cd xenium-flash
+    make
+    cd ..
+
+    # ensure script is executable
+    chmod 755 BitBangOnly
+    chmod 755 FlashOnly
+    chmod 755 FlashOnlyProm
+    chmod 755 xenium-programmer-smd
+    chmod 755 OX-Only_SMD
+    chmod 755 PromOS-programmer-smd
+    chmod 755 xeniumListenerAdvanced
+
+    echo -e '\n** INSTALL COMPLETE **\n'
+
+    echo -e '\nProgram your Xenium by running:\n\t ./xenium-programmer-smd\n'
+else
+    echo -e '\n*** ERROR: No C++ Compiler found!!!!\n'
+fi

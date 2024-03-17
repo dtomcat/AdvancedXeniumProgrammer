@@ -1,0 +1,152 @@
+#!/usr/bin/python3
+
+from gpiozero import LED, Button
+from signal import pause
+import os
+import time
+
+was_held = False
+
+Gled = LED(19)
+Yled = LED(6)
+Rled = LED(7)
+S1led = LED(10)
+S2led = LED(9)
+S3led = LED(11)
+S4led = LED(26)
+Gled.on()
+Yled.off()
+Rled.off()
+
+def ledsOff():
+    Gled.off()
+    Yled.off()
+    Rled.off()
+    S1led.off()
+    S2led.off()
+    S3led.off()
+    S4led.off()
+
+def shutdownButton():
+    Gled.on()
+    Yled.on()
+    Rled.on()
+    time.sleep(1)
+    Rled.off()
+    time.sleep(1)
+    Yled.off()
+    time.sleep(1)
+    Gled.off()
+    cmd = "sudo shutdown -h now"
+    os.system(cmd)
+
+def clearError():
+    Rled.off()
+    Yled.off()
+    S1led.off()
+    S2led.off()
+    S3led.off()
+    S4led.off()
+    
+def held1():
+    global was_held
+    was_held = True
+    complete_Program_Prom()
+
+def released1():
+    global was_held
+    if not was_held:
+        complete_Program()
+    was_held = False
+    
+def held2():
+    global was_held
+    was_held = True
+    onlyFlashProm_Program()
+
+def released2():
+    global was_held
+    if not was_held:
+        onlyFlash_Program()
+    was_held = False
+
+def held3():
+    global was_held
+    was_held = True
+    onlyBitBang()
+
+def released3():
+    global was_held
+    if not was_held:
+        onlyOpenXenium_Program()
+    was_held = False
+
+def held4():
+    global was_held
+    was_held = True
+    shutdownButton()
+
+def released4():
+    global was_held
+    if not was_held:
+        clearError()
+    was_held = False
+    
+def complete_Program():
+    ledsOff
+    print("Full Programming - XOS")
+    os.popen('/home/pi/AdvancedXeniumProgrammer/xenium-programmer-smd').read()
+    Gled.on()
+    print("Ready to go again!")
+
+def complete_Program_Prom():
+    ledsOff
+    print("Full Programming - PromOS")
+    os.popen('/home/pi/AdvancedXeniumProgrammer/PromOS-programmer-smd').read()
+    Gled.on()
+    print("Ready to go again!")
+
+def onlyOpenXenium_Program():
+    ledsOff
+    print("Programming openXenium.jed to Xenium")
+    os.popen('/home/pi/AdvancedXeniumProgrammer/OX-Only_SMD').read()
+    Gled.on()
+    print("Ready to go again!")
+  
+def onlyFlash_Program():
+    ledsOff
+    print("Programming XOS to Flash")
+    os.popen('/home/pi/AdvancedXeniumProgrammer/FlashOnly').read()
+    Gled.on()
+    print("Ready to go again!")
+
+def onlyFlashProm_Program():
+    ledsOff
+    print("Programming PromOS to Flash")
+    os.popen('/home/pi/AdvancedXeniumProgrammer/FlashOnlyProm').read()
+    Gled.on()
+    print("Ready to go again!")
+
+def onlyBitBang():
+    ledsOff
+    print("Programming BitBang Firmware to CPLD")
+    os.popen('/home/pi/AdvancedXeniumProgrammer/BitBangOnly').read()
+    Gled.on()
+    print("Ready to go again!")
+
+
+button1 = Button(13)
+button2 = Button(5)
+button3 = Button(25)
+button4 = Button(24)
+
+button1.when_released = released1
+button1.when_held = held1
+button2.when_released = released2
+button2.when_held = held2
+button3.when_released = released3
+button3.when_held = held3
+button4.when_released = released4
+button4.when_held = held4
+
+pause()

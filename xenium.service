@@ -1,0 +1,9 @@
+[Unit]
+Description=Advanced Xenium Programmer
+
+[Service]
+WorkingDirectory=/home/pi/AdvancedXeniumProgrammer
+ExecStart=/home/pi/AdvancedXeniumProgrammer/xeniumListenerAdvanced
+
+[Install]
+WantedBy=multi-user.target
