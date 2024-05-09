@@ -99,7 +99,7 @@ Just a quick and simple design I put together.  I'm sure this thing could be imp
 
 NOTE:  for the "light pipes", I just used some clear PLA (2.90mm not standard 1.75) filament. 
 
-![3D Case](hardware/RaspberryPiZero/images/Case.jpg)
+![3D Case](images/Case.jpg)
 
 
 --------------
