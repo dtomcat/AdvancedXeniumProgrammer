@@ -44,6 +44,14 @@ https://www.pishop.us/product/raspberry-pi-zero-w/
 - Then run: `./install` 
 
 -------------
+## STATUS LED MEANING (From top to bottom)
+
+- First:  Programming CPLD with BIT BANG firmware
+- Second: Programming Flash with specified OS
+- Third:  Verifying flash was programmed successfully
+- Forth:  Programing CPLD with OpenXenium firmware
+
+-------------
 ## PROGRAMMING THE XENIUM CPLD AND/OR FLASH MEMORY (STANDALONE)
 
 Note: You will need to provide your own PrometheOS bin file. (save it in the /xenium-bin folder as promOS.bin)
@@ -85,7 +93,16 @@ Note: You will need to provide your own PrometheOS bin file. (save it in the /xe
 ![screenshot](images/sshot.png)
 
 -------------
+### 3D PRINTED CASE
 
+Just a quick and simple design I put together.  I'm sure this thing could be improved upon greatly.  Sharing for anyone wanting it.
+
+NOTE:  for the "light pipes", I just used some clear PLA (2.90mm not standard 1.75) filament. 
+
+![3D Case](hardware/RaspberryPiZero/images/Case.jpg)
+
+
+--------------
 ### PC BOARD
 
 Huge thanks to James Bolding for the Original Eagle PCB hardware design!
