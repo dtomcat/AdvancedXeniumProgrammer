@@ -4,6 +4,9 @@ Description=Advanced Xenium Programmer
 [Service]
 WorkingDirectory=/home/pi/AdvancedXeniumProgrammer
 ExecStart=/home/pi/AdvancedXeniumProgrammer/xeniumListenerAdvanced
+StandardOutput=journal
+StandardError=journal
+Environment="PYTHONUNBUFFERED=x"
 
 [Install]
 WantedBy=multi-user.target
