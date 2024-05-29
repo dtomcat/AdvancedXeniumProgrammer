@@ -33,8 +33,8 @@ if [ -e $DEV_FILE ]; then
         sudo apt -y update
         sudo apt -y install build-essential git cmake
         # Installing latest wiringpi compatible with RPI-OS
-        wget https://project-downloads.drogon.net/wiringpi-latest.deb -O /tmp/wiringpi-latest.deb 
-        sudo dpkg -i /tmp/wiringpi-latest.deb
+        wget https://github.com/WiringPi/WiringPi/releases/download/3.4/wiringpi_3.4_arm64.deb -O /tmp/wiringpi-arm64.deb 
+        sudo dpkg -i /tmp/wiringpi-arm64.deb
     fi
 elif [ $expert ]; then
         echo -e 'Expert mode enabled.'
