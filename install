@@ -31,10 +31,37 @@ if [ -e $DEV_FILE ]; then
         echo -e '\n INSTALLING PI UPDATES AND REQUIREMENTS\n'
         echo '--------------------------------------------'
         sudo apt -y update
-        sudo apt -y install build-essential git cmake
-        # Installing latest wiringpi compatible with RPI-OS
-        wget https://project-downloads.drogon.net/wiringpi-latest.deb -O /tmp/wiringpi-latest.deb 
-        sudo dpkg -i /tmp/wiringpi-latest.deb
+		sudo apt -y install build-essential git cmake
+
+		echo -e '\nINSTALLING UPDATED WIRINGPI FROM GITHUB (community fork)\n'
+
+        # Detect architecture
+        ARCH=$(dpkg --print-architecture)
+        if [ "$ARCH" = "armhf" ]; then
+            DEB_URL="https://github.com/WiringPi/WiringPi/releases/download/3.14/wiringpi_3.14_armhf.deb"
+        elif [ "$ARCH" = "arm64" ]; then
+            DEB_URL="https://github.com/WiringPi/WiringPi/releases/download/3.14/wiringpi_3.14_arm64.deb"
+        else
+            echo "Unsupported architecture: $ARCH"
+            echo "You may need to build WiringPi from source or use a different GPIO library."
+            exit 1
+        fi
+
+        wget "$DEB_URL" -O /tmp/wiringpi.deb || {
+            echo "Failed to download WiringPi .deb from $DEB_URL"
+            echo "Check your internet or try a newer release at https://github.com/WiringPi/WiringPi/releases"
+            exit 1
+        }
+
+        sudo dpkg -i /tmp/wiringpi.deb
+        rm -f /tmp/wiringpi.deb
+
+        # Quick verification
+        if gpio -v >/dev/null 2>&1; then
+            echo "WiringPi installed successfully (version: $(gpio -v | head -n1))"
+        else
+            echo "Warning: WiringPi installation may have issues - check 'gpio -v'"
+        fi
     fi
 elif [ $expert ]; then
         echo -e 'Expert mode enabled.'
